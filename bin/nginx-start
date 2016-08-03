@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Evaluate config to get $PORT
+erb config/nginx.conf.erb > config/nginx.conf
+
+# Create logs dir. NGINX insists on creating logs/error.log even
+# though it will remain an empty file, with actual logging on stderr.
+mkdir -p logs
+
+# Start NGINX. SIGQUIT for graceful shutdown.
+bin/nginx -p "$PWD" -c config/nginx.conf
+
