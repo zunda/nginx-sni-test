@@ -18,7 +18,11 @@ http {
   default_type application/octet-stream;
   sendfile on;
 
-  upstream website {
+  upstream nonssl {
+    server ssl.zunda.ninja:80 ;
+  }
+
+  upstream ssl {
     server ssl.zunda.ninja:443 ;
   }
 
@@ -31,18 +35,25 @@ http {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header Host ssl.zunda.ninja;
       proxy_redirect off;
-      proxy_pass https://website;
+      proxy_pass http://nonssl;
     }
 
-    location /ssl {
+    location /sni {
+      rewrite ^/sni(.+) $1 break;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header Host ssl.zunda.ninja;
       proxy_redirect off;
-      proxy_pass https://website;
+      proxy_pass https://ssl;
       proxy_ssl_server_name on;
 			proxy_ssl_name ssl.zunda.ninja;
     }
 
+    location /nosni {
+			rewrite ^/nosni(.+) $1 break;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host ssl.zunda.ninja;
+      proxy_redirect off;
+      proxy_pass https://ssl;
+    }
   }
-
 }
