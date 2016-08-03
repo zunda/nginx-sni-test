@@ -16,9 +16,11 @@ git push heroku master
 ### Access to the proxy
 Note the `HTTP_X_FORWARDED_PROTO` and `HTTP_X_FORWARDED_PORT` headers
 
-- Target: http://ssl.zunda.ninja/env
-  (the endpoint is on Heroku SSL as of writing this)
-- Proxy through HTTP: http://<appname>.herokuapp.com/env
-- Proxy through HTTPS with SNI enabled http://<appname>.herokuapp.com/sni/env
-- Proxy through HTTPS with SNI enabled http://<appname>.herokuapp.com/noni/env
+Target: http://ssl.zunda.ninja/env
+(the endpoint is on Heroku SSL as of writing this)
+
+Proxy through
+- HTTP: http://*app_name*.herokuapp.com/env
+- HTTPS with SNI enabled: http://*app_name*.herokuapp.com/sni/env
+- HTTPS with SNI disabled: http://*app_name*.herokuapp.com/noni/env -
   shows 502 Bad Gateway
