@@ -9,4 +9,3 @@ mkdir -p logs
 
 # Start NGINX. SIGQUIT for graceful shutdown.
 bin/nginx -p "$PWD" -c config/nginx.conf
-
