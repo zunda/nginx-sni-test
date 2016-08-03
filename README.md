@@ -1,4 +1,24 @@
 # nginx-sni-test
 A test app to check nginx configuration as a proxy to an SNI endpoint
 
-I could confirm that [adding lines like `proxy_ssl_server_name on;` and `proxy_ssl_name <host name for SNI extension>;`](https://github.com/zunda/nginx-sni-test/blob/master/config/nginx.conf.erb#L47-L48) makes nginx work as expected.
+I could confirm that [adding lines like `proxy_ssl_server_name on;` and `proxy_ssl_name <host name for SNI extension>;`](https://github.com/zunda/nginx-sni-test/blob/master/config/nginx.conf.erb#L47-L48) makes nginx work as expected:
+
+## Procedure
+### Deploy to Heroku
+Clone this repository and
+
+```
+heroku create
+heroku buildpacks:set https://github.com/dubsmash/nginx-buildpack
+git push heroku master
+```
+
+### Access to the proxy
+Note the `HTTP_X_FORWARDED_PROTO` and `HTTP_X_FORWARDED_PORT` headers
+
+- Target: http://ssl.zunda.ninja/env
+  (the endpoint is on Heroku SSL as of writing this)
+- Proxy through HTTP: http://<appname>.herokuapp.com/env
+- Proxy through HTTPS with SNI enabled http://<appname>.herokuapp.com/sni/env
+- Proxy through HTTPS with SNI enabled http://<appname>.herokuapp.com/noni/env
+  shows 502 Bad Gateway
